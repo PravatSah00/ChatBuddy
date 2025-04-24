@@ -1,0 +1,28 @@
+.container {
+    margin: 9px 0;
+    padding: 10px 15px;
+    font-size: 15px;
+    letter-spacing: 0.5px;
+    gap: 8px;
+    display: flex;
+    background-color: #0065b8;
+    color: rgba(255, 255, 255, 0.575);
+    border-radius: 5px;
+}
+
+.menu {
+    padding: 10px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.menu:hover {
+    background-color: #00274738;
+    color: rgba(255, 255, 255, 0.836);
+    
+}
+
+.activeMenu {
+    background-color: #00274773 !important;
+    color: rgba(255, 255, 255, 0.836);
+}

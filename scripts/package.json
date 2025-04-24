@@ -1,0 +1,27 @@
+{
+  "scripts": {
+    "start": "wp-scripts start",
+    "start:hot": "wp-scripts start --hot",
+    "build": "wp-scripts build",
+    "build:block-1": "wp-scripts build --webpack-src-dir='./src/block-1'",
+    "build:block-2": "wp-scripts build --webpack-src-dir='./src/block-2'"
+  },
+  "devDependencies": {
+    "@wordpress/scripts": "^30.15.0"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mui/material": "^7.0.2",
+    "@reduxjs/toolkit": "^2.6.1",
+    "@tanstack/react-table": "^8.21.3",
+    "@xyflow/react": "^12.5.5",
+    "axios": "^1.8.4",
+    "fuse.js": "^7.1.0",
+    "material-react-table": "^3.2.1",
+    "motion": "^12.7.5",
+    "react-redux": "^9.2.0",
+    "react-spinners": "^0.17.0",
+    "uuid": "^11.1.0"
+  }
+}

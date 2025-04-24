@@ -1,0 +1,8 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "chatbot/adminblock",
+  "version": "1.0.0",
+  "title": "ChatBotAdmin",
+  "editorScript": "file:./index.js"
+}

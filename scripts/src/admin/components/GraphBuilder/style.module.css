@@ -1,0 +1,147 @@
+/**
+    Main contaienr style
+**/
+.container {
+    background-color: #F7F9FB;
+    box-shadow: 0px 0px 7px #aaaaaa6b;
+    border-radius: 5px;
+    margin: 25px 0;
+}
+
+/**
+    Top Left custom panal style style
+**/
+
+.customPanalWrapper{
+    width: 300px;
+}
+
+.customPanal {
+    display: flex;
+    justify-content: space-around;
+    padding: 7px;
+    background-color: white;
+    box-shadow: 0px 0px 5px #aaaaaa6b;
+}
+
+.customPanal button {
+    cursor: pointer;
+    margin: 3px 4px;
+    padding: 7px 15px;
+    background-color: white;
+    color: #17A2B8;
+    border: 1px solid #17A2B8;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.customPanal button:hover {
+    background-color: #17A2B8;
+    color: white;
+}
+
+/**
+    Single Node container style
+**/
+.singleNodeContainer {
+    background-color: white;
+    border: 1px solid #17A2B8;
+    border-radius: 10px;
+
+    padding: 15px;
+
+    /* position: relative; */
+}
+
+/**
+    ToolBar of single node style
+**/
+.toolBar {
+    border: 1px solid #17A2B8;
+    border-radius: 5px;
+    background-color: white;
+    color: #17A2B8;
+    padding: 7px 10px;
+    display: flex;
+    gap: 10px;
+}
+
+.toolBar label {
+    margin-right: 4px;
+}
+
+.toolBar select {
+    border: 1px solid #17A2B8;
+    color: #17A2B8;
+}
+
+.toolBar button {
+    cursor: pointer;
+    padding: 3px 15px;
+    background-color: white;
+    color: #17A2B8;
+    border: 1px solid #17A2B8;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+.toolBar button:hover {
+    background-color: #17A2B8;
+    color: white;
+}
+
+/**
+    Style of view container
+**/
+.viewContainer {
+    width: 100%;
+}
+
+.viewContainer input {
+    background-color: white;
+    color: #17A2B8;
+    border: none;
+    text-align: center;
+}
+
+.viewContainer input:focus {
+    outline: none;
+}
+
+/**
+    Style of portal container
+**/
+.portalContainer {
+    display: flex;
+    flex-direction: column;
+    gap:11px;
+
+   background-color: white;
+   color:#17A2B8;
+
+   margin-top: 13px;
+   max-height: 370px;
+
+   padding: 10px 10px 15px;
+
+   box-shadow: 0px 0px 5px #aaaaaa6b;
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputContainer label {
+    margin-bottom: 6px;
+}
+
+.inputContainer input {
+    background-color: white;
+    border: 1px solid #17A2B8;
+
+}
+
+.inputContainer input:focus {
+    outline: 1px solid #17A2B8;
+}

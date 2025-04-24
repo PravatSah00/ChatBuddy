@@ -1,0 +1,22 @@
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  background-color: #f0f0f1;
+  color: #021526;
+  padding-right: 20px;
+}
+
+@media screen and (max-width: 782px) {
+  .container {
+    padding-right: 10px;
+  }
+}
+
+.MuiInput-underline:before,
+.MuiInput-underline:after {
+  display: none !important;
+}
