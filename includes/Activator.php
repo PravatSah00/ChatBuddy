@@ -50,10 +50,6 @@ class Chatbot_Activator {
 							"x" => 464,
 							"y" => 76
 						],
-						"measured" => [
-							"width"  => 193,
-							"height" => 51
-						],
 					],
 					[
 						"id"   => "5790bb4a-0a97-4e2e-8292-f0f8f6e3994e",
@@ -66,10 +62,6 @@ class Chatbot_Activator {
 						"position" => [
 							"x" => -480.99999500785117,
 							"y" => 304.99999822313345
-						],
-						"measured" => [
-							"width"  =>  193,
-							"height" =>  51
 						],
 					],
 					[
@@ -84,10 +76,6 @@ class Chatbot_Activator {
 							"x" =>  151.00000456908526,
 							"y" =>  298.9999981385208
 						],
-						"measured" => [
-							"width"  =>  193,
-							"height" =>  51
-						],
 					],
 					[
 						"id"   =>  "3460d66b-225d-4908-af0e-d2bb5a222e30",
@@ -101,10 +89,6 @@ class Chatbot_Activator {
 							"x" =>  739.0000036383458,
 							"y" =>  281.9999981385207
 						],
-						"measured" => [
-							"width"  =>  193,
-							"height" =>  51
-						],
 					],
 					[
 						"id"   =>  "5ad5aa4f-8e01-4cb8-b86d-754764ced687",
@@ -117,10 +101,6 @@ class Chatbot_Activator {
 						"position" => [
 							"x" =>  1137.2500027076062,
 							"y" =>  278.99999771545737
-						],
-						"measured" => [
-							"width"  =>  193,
-							"height" =>  51
 						],
 					],
 					[
@@ -136,10 +116,6 @@ class Chatbot_Activator {
 							"x" =>  621.5890525185059,
 							"y" =>  419.9849845390762
 						],
-						"measured" =>  [
-							"width"  =>  193,
-							"height" =>  51
-						],
 					],
 					[
 						"id"   =>  "831df988-52b5-4bb4-ba1a-4a48c8a8d9ce",
@@ -154,10 +130,6 @@ class Chatbot_Activator {
 							"x" =>  854.7133954075763,
 							"y" =>  419.98498453907615
 						],
-						"measured" =>  [
-							"width"  =>  193,
-							"height" =>  51
-						],
 					],
 					[
 						"id"   =>  "0afd53b1-c63f-4941-bb18-a6ccb63a2f64",
@@ -170,10 +142,6 @@ class Chatbot_Activator {
 						"position" =>  [
 							"x" =>  -479.22329217892764,
 							"y" =>  424.33458883649183
-						],
-						"measured" =>  [
-							"width"  =>  193,
-							"height" =>  51
 						],
 					],
 					[
@@ -188,10 +156,6 @@ class Chatbot_Activator {
 							"x" =>  -258.57454284373375,
 							"y" =>  422.7471877621379
 						],
-						"measured" =>  [
-							"width"  =>  193,
-							"height" =>  51
-						],
 					],
 					[
 						"id"   =>  "8a812d2e-7737-49c0-918f-04412c1707b9",
@@ -204,10 +168,6 @@ class Chatbot_Activator {
 						"position" =>  [
 							"x" =>  -700.6342447371832,
 							"y" =>  426.33458883649195
-						],
-						"measured" =>  [
-							"width"  =>  193,
-							"height" =>  51
 						],
 					],
 					[
@@ -223,10 +183,6 @@ class Chatbot_Activator {
 							"x" =>  257.22691285249743,
 							"y" =>  417.67378563073095
 						],
-						"measured" =>  [
-							"width"  =>  193,
-							"height" =>  51
-						],
 					],
 					[
 						"id"   =>  "eebdd9d2-7319-429a-9d24-913405a1cca6",
@@ -240,10 +196,6 @@ class Chatbot_Activator {
 						"position" =>  [
 							"x" =>  37.11345896462956,
 							"y" =>  579.285045727722
-						],
-						"measured" =>  [
-							"width"  =>  193,
-							"height" =>  51
 						],
 					],
 				],
