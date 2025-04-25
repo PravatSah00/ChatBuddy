@@ -75,8 +75,9 @@ class Chatbot_Public {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/chatbot-public.css', array(), $this->version, 'all' );
+		if (is_admin()) return;
 
+		wp_enqueue_style( $this->plugin_name . 'public', CHATBOT_PLUGIN_DIR_URL . 'scripts/build/public/index.css', [], $this->version, 'all' );
 	}
 
 	/**
@@ -98,8 +99,36 @@ class Chatbot_Public {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/chatbot-public.js', array( 'jquery' ), $this->version, false );
+		// Only add on frontend, not in admin
+		if (is_admin()) return;
+
+		wp_enqueue_script( $this->plugin_name, CHATBOT_PLUGIN_DIR_URL . 'scripts/build/public/index.js', [ 'react-dom', 'react-jsx-runtime', 'wp-element'], $this->version, true );
+
+		/**
+		 * Localize script data
+		 */
+		wp_localize_script( $this->plugin_name, 'chatbotLocalizer', apply_filters( 'chatbot_localizer', [
+            'apiurl'            => untrailingslashit( get_rest_url() ),
+            'nonce'             => wp_create_nonce( 'wp_rest' ),
+            'decisionGraph'		=> get_option( '_decision_graph', [
+				'nodes' => [],
+				'edges' => [],
+			]),
+			'smartAnswer'		=> get_option( '_smart_answer', [] ),
+        ]));
 
 	}
 
+	/**
+	 * Register the Chatbod div.
+	 * @since    1.0.0
+	 */
+	public function register_chatbot() {
+		// Only add on frontend, not in admin
+		if (is_admin()) return;
+
+		?>
+			<div id="chatbotpublic"></div>
+		<?php
+	}
 }

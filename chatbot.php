@@ -17,7 +17,7 @@
  * Plugin URI:        https://http://@wiiBeThere
  * Description:       Plugin Short Description Will Be Here
  * Version:           1.0.0
- * Author:            Pravat Sahoo
+ * Author:            Pageoptima
  * Author URI:        https://http://@wiiBeThere/
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt

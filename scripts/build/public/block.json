@@ -1,1 +1,8 @@
-{}
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 2,
+  "name": "chatbot/publicblock",
+  "version": "1.0.0",
+  "title": "ChatBotPublic",
+  "editorScript": "file:./index.js"
+}

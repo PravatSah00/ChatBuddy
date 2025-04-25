@@ -76,6 +76,10 @@ class Chatbot_Admin {
 		 * class.
 		 */
 
+		$screen = get_current_screen();
+
+		if ( !$screen || ( $screen->id != 'toplevel_page_chatbot' ) ) return;
+
 		wp_enqueue_style( $this->plugin_name . 'glob', CHATBOT_PLUGIN_DIR_URL . 'scripts/build/admin/index.css', [], $this->version, 'all' );
 		wp_enqueue_style( $this->plugin_name . 'main' , CHATBOT_PLUGIN_DIR_URL . 'scripts/build/admin/style-index.css', [], $this->version, 'all' );
 
@@ -87,7 +91,6 @@ class Chatbot_Admin {
 	 * @since    1.0.0
 	 */
 	public function enqueue_scripts() {
-
 		/**
 		 * This function is provided for demonstration purposes only.
 		 *
@@ -99,6 +102,10 @@ class Chatbot_Admin {
 		 * between the defined hooks and the functions defined in this
 		 * class.
 		 */
+
+		$screen = get_current_screen();
+		
+		if ( !$screen || ( $screen->id != 'toplevel_page_chatbot' ) ) return;
 
 		wp_enqueue_script( $this->plugin_name, CHATBOT_PLUGIN_DIR_URL . 'scripts/build/admin/index.js', [ 'react-dom', 'react-jsx-runtime', 'wp-element'], $this->version, true );
 
@@ -121,13 +128,13 @@ class Chatbot_Admin {
 	 */
 	public function register_menu() {
 		add_menu_page(
-			'ChatBot',          		 // Page title
-			'ChatBot',               	 // Menu title
+			'ChatBuddy',          		 // Page title
+			'ChatBuddy',               	 // Menu title
 			'manage_options',            // Capability
 			'chatbot',          		 // Menu slug
 			[$this, 'render_page'],		 // Callback
 			'dashicons-reddit',   		 // Icon URL
-			30                            // Position
+			30                           // Position
 		);
 	}
 
