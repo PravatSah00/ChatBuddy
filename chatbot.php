@@ -10,10 +10,10 @@
  *
  * @link              https://http://@wiiBeThere
  * @since             1.0.0
- * @package           Chatbot
+ * @package           ChatBuddy
  *
  * @wordpress-plugin
- * Plugin Name:       ChatBot
+ * Plugin Name:       ChatBuddy
  * Plugin URI:        https://http://@wiiBeThere
  * Description:       Plugin Short Description Will Be Here
  * Version:           1.0.0

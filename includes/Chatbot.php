@@ -72,7 +72,8 @@ class Chatbot {
 		} else {
 			$this->version = '1.0.0';
 		}
-		$this->plugin_name = 'chatbot';
+		
+		$this->plugin_name = 'chatbuddy';
 
 		$this->load_dependencies();
 		$this->set_locale();
@@ -115,6 +116,11 @@ class Chatbot {
 		 * The class responsible for defining all actions that occur in the admin area.
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/Admin.php';
+
+		/**
+		 * The class responsible for defining all api for admin.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'admin/RestApi.php';
 
 		/**
 		 * The class responsible for defining all actions that occur in the public-facing
