@@ -128,6 +128,11 @@ class Chatbot {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/Public.php';
 
+		/**
+		 * The class responsible for defining all api for user.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/RestApi.php';
+
 		$this->loader = new Chatbot_Loader();
 
 	}

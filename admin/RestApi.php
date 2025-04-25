@@ -1,6 +1,6 @@
 <?php
 
-class RestApi {
+class AdminRestApi {
     /**
      * Rest class constructor function
      */
@@ -14,15 +14,15 @@ class RestApi {
      */
     public function register_rest_apis() {
 
-        register_rest_route( Catalog()->rest_namespace, '/save_enquiry', [
+        register_rest_route( 'chatbuddy', '/save-graph', [
             'methods'               => \WP_REST_Server::ALLMETHODS,
-            'callback'              => [ $this, 'save_settings' ],
+            'callback'              => [ $this, 'save_graph' ],
             'permission_callback'   => [ $this, 'api_permission' ]
         ]);
 
-        register_rest_route( Catalog()->rest_namespace, '/save_enquiry', [
+        register_rest_route( 'chatbuddy', '/save-smtans', [
             'methods'               => \WP_REST_Server::ALLMETHODS,
-            'callback'              => [ $this, 'save_settings' ],
+            'callback'              => [ $this, 'save_smtans' ],
             'permission_callback'   => [ $this, 'api_permission' ]
         ]);
 	}
@@ -36,17 +36,34 @@ class RestApi {
 	}
 
     /**
-     * Save global settings
+     * Save graph setting
      * @param mixed $request
      * @return \WP_Error|\WP_REST_Response
      */
-    public function save_settings( $request ) {
+    public function save_graph( $request ) {
         
-        $requestInfo  = $request->get_param( 'info' );
+        $nodes  = $request->get_param( 'nodes' );
+        $edges  = $request->get_param( 'edges' );
 
-        return rest_ensure_response([
-            'success' => true,
-            'message' => 'Saved Successfully',
+        update_option( '_decision_graph', [
+            'nodes' => $nodes ?? [],
+            'edges' => $edges ?? [],
         ]);
+
+        return rest_ensure_response([ 'success' => true ]);
+	}
+
+    /**
+     * Save question and answer
+     * @param mixed $request
+     * @return \WP_Error|\WP_REST_Response
+     */
+    public function save_smtans( $request ) {
+        
+        $smtans = $request->get_param( 'smtans' );
+
+        update_option( '_smart_answer', $smtans );
+
+        return rest_ensure_response([ 'success' => true ]);
 	}
 }

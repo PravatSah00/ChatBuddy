@@ -1,5 +1,7 @@
 import React from 'react';
+import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import { useSnackbar } from 'notistack';
 import { useSelector, useDispatch } from "react-redux";
 import {
     addQuestionAnswer,
@@ -15,9 +17,25 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 import Button from '@mui/material/Button';
 
+/**
+ * Api call to save the smartAns
+ */
+const saveSmartAns = async ( smartAns ) => {
+    const result = await axios.post(`${chatbotLocalizer.apiurl}/chatbuddy/save-smtans`, smartAns, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          "X-WP-Nonce":    chatbotLocalizer.nonce,
+        },
+    });
+
+    return result.data;
+}
+
 const SmartAnswerBuilder = () => {
 
     const dispatch = useDispatch();
+
+    const { enqueueSnackbar } = useSnackbar();
 
     // Get state variable from store
     const smartAnswerState = useSelector((state) => state.smartAnswer);
@@ -61,6 +79,21 @@ const SmartAnswerBuilder = () => {
      */
     const handleChangeAnswer = (id, answer) => {
         dispatch(changeQuestionAnswer({ id: id, key: 'answer', value: answer }));
+    }
+
+    /**
+     * Handle save of SmartAns
+     */
+    const handleSave = async () => {
+        try {
+            const response = await saveSmartAns({ smtans: smartAnswer });
+            
+            enqueueSnackbar('Successfully Saved!', { variant: 'success' });
+
+        } catch {
+            // Handle error
+            enqueueSnackbar('Unable To Saved!', { variant: 'error' });
+        }
     }
 
     const columns = [
@@ -173,7 +206,7 @@ const SmartAnswerBuilder = () => {
                     Add New
                 </Button>
                 <Button
-                    onClick={() => console.log("Handle save")}
+                    onClick={() => handleSave()}
                     variant="outlined"
                     color='primary'
                 >

@@ -1,5 +1,6 @@
 // src/components/ChatBot.jsx
 import React, { useState, useRef, useEffect, useMemo } from 'react';
+import axios from 'axios';
 import Fuse from "fuse.js";
 import {
     Box, TextField, IconButton, Avatar,
@@ -12,12 +13,15 @@ import { BeatLoader } from 'react-spinners';
 
 import { useSelector } from "react-redux";
 
-const submitAction = async (action, info) => {
-    return new Promise((res, rej) => {
-        setTimeout(() => {
-            res('Submit Successfull');
-        }, 3000)
-    })
+const submitAction = async (data) => {
+    const result = await axios.post(`${chatbotLocalizer.apiurl}/chatbuddy/action`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          "X-WP-Nonce":    chatbotLocalizer.nonce,
+        },
+    });
+
+    return result.data;
 }
 
 /**
@@ -251,13 +255,11 @@ const ChatBot = () => {
      */
     const handleActionSubmit = async ({ action, value }) => {
 
-        console.log(action, value);
-
         // Set bot loading message
         const botLoadingMessage = { from: 'bot', type: 'loading', time: new Date() };
         setMessages(prev => [...prev, botLoadingMessage]);
 
-        const message = await submitAction(action, value);
+        const { message } = await submitAction({ action: action, value: value });
 
         // Remove bot loading message
         setMessages((preMsg) => preMsg.filter((msg, ind) => ind != preMsg.length - 1));

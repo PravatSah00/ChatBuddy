@@ -1,6 +1,8 @@
 import React, { useState, useCallback, memo, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from "react-redux";
+import { useSnackbar } from 'notistack';
 import { v4 as uuidv4 } from 'uuid';
+import axios from 'axios';
 import SingleNode from './SingleNode';
 import CustomPanal from './CustomPanal';
 import {
@@ -64,6 +66,20 @@ const nodeTypes = {
 };
 
 /**
+ * Api call to save the graph
+ */
+const saveGraph = async ( graph ) => {
+    const result = await axios.post(`${chatbotLocalizer.apiurl}/chatbuddy/save-graph`, graph, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          "X-WP-Nonce":    chatbotLocalizer.nonce,
+        },
+    });
+
+    return result.data;
+}
+
+/**
  * Main graph builder component
  */
 const GraphBuilder = () => {
@@ -72,6 +88,8 @@ const GraphBuilder = () => {
     const flowBuilderState = useSelector(( state ) => state.flowBuilder );
 
     const dispatch = useDispatch();
+
+    const { enqueueSnackbar } = useSnackbar();
 
     const [nodes, setNodes, onNodesChange] = useNodesState( flowBuilderState.nodes );
     const [edges, setEdges, onEdgesChange] = useEdgesState( flowBuilderState.edges );
@@ -150,6 +168,32 @@ const GraphBuilder = () => {
         setViewport({});
     }
 
+    /**
+     * Handle save of graph
+     */
+    const handleSave = async () => {
+        try {
+            const response = await saveGraph({
+                nodes: nodes.map((node) => {
+                    return {
+                        id:         node.id,
+                        type:       node.type,
+                        data:       node.data,
+                        position:   node.position,
+                    }
+                }),
+                edges: edges,
+            });
+            
+            enqueueSnackbar('Successfully Saved!', { variant: 'success' });
+
+        } catch {
+            // Handle error
+            enqueueSnackbar('Unable To Saved!', { variant: 'error' });
+
+        }
+    }
+
     return (
         <ReactFlow
             nodes={nodes}
@@ -186,7 +230,7 @@ const GraphBuilder = () => {
                 <CustomPanal
                     onAddNode={() => handleAddNode()}
                     onClearAll={() => handleClearAll()}
-                    onSave={() => console.log(nodes, edges)}
+                    onSave={() => handleSave()}
                 />
             </Panel>
         </ReactFlow>

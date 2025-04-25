@@ -49,6 +49,8 @@ class Chatbot_Public {
 	 */
 	public function __construct( $plugin_name, $version ) {
 
+		new PublicRestApi();
+
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
