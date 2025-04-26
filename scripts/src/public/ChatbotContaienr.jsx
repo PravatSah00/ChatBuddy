@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Box, ClickAwayListener } from '@mui/material';
-import Draggable from 'react-draggable';
+// import Draggable from 'react-draggable';
 import ChatBot from './Chatbot';
 import chatImage from './assets/chatbot.png';
 
@@ -11,7 +11,7 @@ const ChatbotContainer = () => {
 
     return (
         <>
-            <Draggable>
+            {/* <Draggable> */}
                 <Box
                     sx={{
                         position: 'fixed',
@@ -25,8 +25,8 @@ const ChatbotContainer = () => {
                         alt="Chatbot"
                         draggable={false}
                         style={{
-                            width: 80,
-                            height: 80,
+                            width: 50,
+                            height: 50,
                             padding: 8,
                             borderRadius: '50%',
                             cursor: 'pointer',
@@ -36,7 +36,7 @@ const ChatbotContainer = () => {
                         onClick={() => setOpened(true)}
                     />
                 </Box>
-            </Draggable>
+            {/* </Draggable> */}
 
             {/* Chat Container (Initially Centered + Draggable + ClickAway) */}
             {opened && (
@@ -50,6 +50,7 @@ const ChatbotContainer = () => {
                         backgroundColor: 'rgba(0, 0, 0, 0.50)',
                         zIndex: 1200,
                     }}
+                    className='chatboxContainer'
                 >
                     {/* <Draggable
                         nodeRef={chatbotRef}
@@ -69,7 +70,6 @@ const ChatbotContainer = () => {
                                 overflow: 'hidden',
                                 borderRadius: 5,
                                 width: 'min(650px, 80%)',
-                                cursor: 'move',
                                 zIndex: 1201,
                                 margin: 'auto',
                             }}

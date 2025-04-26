@@ -380,7 +380,12 @@ const ChatBot = () => {
                                             }
                                         </Avatar>
                                         :
-                                        <Box sx={{ width: 32, height: 32 }}></Box>
+                                        <div style={{ width: 32, height: 32, flexShrink: 0 }}>
+                                            {
+                                                // !isPreviousBot &&
+                                                // <SmartToyIcon fontSize="small" />
+                                            }
+                                        </div>
                                 }
                             </>
                             }
@@ -523,7 +528,7 @@ const ChatBot = () => {
                         display: 'flex',
                         alignItems: 'center',
                         px: 2,
-                        py: 1,
+                        py: 2,
                         borderRadius: 999,
                         background: '#f5f5f5',
                         boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
@@ -532,6 +537,7 @@ const ChatBot = () => {
                 >
                     {/* 💬 Text Input */}
                     <TextField
+                        sx={{margin: '1px'}}
                         variant="standard"
                         placeholder="Type a message"
                         value={input}
