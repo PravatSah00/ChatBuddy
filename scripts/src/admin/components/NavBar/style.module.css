@@ -14,6 +14,8 @@
     padding: 10px 12px;
     border-radius: 5px;
     cursor: pointer;
+    color: rgba(255, 255, 255, 0.575);
+    text-decoration: none;
 }
 
 .menu:hover {
@@ -24,5 +26,5 @@
 
 .activeMenu {
     background-color: #00274773 !important;
-    color: rgba(255, 255, 255, 0.836);
+    color: rgba(255, 255, 255, 0.836) !important;
 }

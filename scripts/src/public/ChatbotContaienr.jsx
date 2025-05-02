@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Box, ClickAwayListener } from '@mui/material';
-// import Draggable from 'react-draggable';
-import ChatBot from './Chatbot';
+import ChatBot from '@public/Chatbot.jsx';
 import chatImage from './assets/chatbot.png';
 
 const ChatbotContainer = () => {

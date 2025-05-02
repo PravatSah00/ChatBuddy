@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "notistack": "^3.0.2"
+  },
+  "devDependencies": {
+    "webpack-merge": "^6.0.1"
   }
 }

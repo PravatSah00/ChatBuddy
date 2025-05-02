@@ -190,7 +190,6 @@ const GraphBuilder = () => {
         } catch {
             // Handle error
             enqueueSnackbar('Unable To Saved!', { variant: 'error' });
-
         }
     }
 
@@ -213,7 +212,6 @@ const GraphBuilder = () => {
             className={Style.container}
             ref={containerRef}
 
-            // 🔽 HERE IS THE MAGIC
             defaultEdgeOptions={{
                 type: 'default',
                 style: { stroke: '#007BFF', strokeWidth: 1.2 },

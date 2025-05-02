@@ -1,20 +1,42 @@
+/**
+ *React core import 
+ */
 import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { SnackbarProvider } from 'notistack';
-import store from './store.js';
 
-import Layout from './Layout';
+/**
+ * Import router
+ */
+import Router from "@admin/Router.jsx";
+
+/**
+ * Redux-toolkit support
+ */
+import { Provider } from 'react-redux';
+import store from '@admin/store.js';
+
+/**
+ * Theme support
+ */
+import { ColorModeProvider } from '@admin/theme/ThemeContext';
+
+/**
+ * Notis provider
+ */
+import { SnackbarProvider } from 'notistack';
+
 
 import './index.css';
 
 createRoot(document.getElementById('chatbotadmin')).render(
     <Provider store={store}>
-        <SnackbarProvider
-            maxSnack={3}
-            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-            style={{ marginTop: '16px' }}
-        >
-            <Layout />
-        </SnackbarProvider>
+        <ColorModeProvider>
+            <SnackbarProvider
+                maxSnack={3}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                style={{ marginTop: '16px' }}
+            >
+                <Router />
+            </SnackbarProvider>
+        </ColorModeProvider>
     </Provider>,
 );

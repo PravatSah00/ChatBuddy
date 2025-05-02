@@ -1,4 +1,4 @@
-import GraphBuilder from "../../components/GraphBuilder";
+import GraphBuilder from "@admin/components/GraphBuilder";
 import Style from './style.module.css';
 
 /**

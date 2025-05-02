@@ -6,7 +6,7 @@ import Style from './style.module.css';
 const Title = () => {
     return (
         <div className={Style.container}>
-            Chat Bot
+            Chat Buddy
         </div>
     )
 }

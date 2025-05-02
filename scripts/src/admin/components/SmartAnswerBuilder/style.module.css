@@ -17,3 +17,19 @@
     position: relative;
     z-index: 99;
 }
+
+.buttonGroup button {
+    cursor: pointer;
+    margin: 3px 4px;
+    padding: 7px 15px;
+    background-color: white;
+    color: #17A2B8;
+    border: 1px solid #17A2B8;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.buttonGroup button:hover {
+    background-color: #17A2B8;
+    color: white;
+}

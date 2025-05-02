@@ -198,20 +198,16 @@ const SmartAnswerBuilder = () => {
 
             />
             <div className={style.buttonGroup}>
-                <Button
+                <button
                     onClick={() => handleAddNew()}
-                    variant="outlined"
-                    color='primary'
                 >
                     Add New
-                </Button>
-                <Button
+                </button>
+                <button
                     onClick={() => handleSave()}
-                    variant="outlined"
-                    color='primary'
                 >
                     Save
-                </Button>
+                </button>
             </div>
         </div>
     );

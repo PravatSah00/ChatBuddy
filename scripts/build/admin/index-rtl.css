@@ -1,1 +1,25 @@
-*{box-sizing:border-box;margin:0;padding:0}.container{background-color:#f0f0f1;color:#021526;padding-left:20px}@media screen and (max-width:782px){.container{padding-left:10px}}.MuiInput-underline:after,.MuiInput-underline:before{display:none!important}
+/*!*************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/admin/index.css ***!
+  \*************************************************************************************************************************************************************************/
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  background-color: #f0f0f1;
+  color: #021526;
+  padding-left: 20px;
+}
+
+@media screen and (max-width: 782px) {
+  .container {
+    padding-left: 10px;
+  }
+}
+
+.MuiInput-underline:before,
+.MuiInput-underline:after {
+  display: none !important;
+}

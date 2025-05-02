@@ -94,7 +94,7 @@ const SingleNode = memo(({ id, data, type, selected }) => {
                     data={data}
                     onTypeChange={(newType) => handleTypeChanges(newType)}
                     onDelete={() => handleDelete()}
-                />    
+                />  
             </NodeToolbar>
 
             {/* Top Handle Connecter */}
@@ -151,8 +151,7 @@ const SingleNode = memo(({ id, data, type, selected }) => {
                         type != 'redirect' &&
                         <div className={style.inputContainer}>
                             <label>Message</label>
-                            <input
-                                type='text'
+                            <textarea
                                 name='message'
                                 placeholder='Enter Message'
                                 value={data.message}
@@ -195,7 +194,6 @@ const SingleNode = memo(({ id, data, type, selected }) => {
                                 }}
                             />
                         </div>
-
                     }
                 </Portal>
 
@@ -203,7 +201,7 @@ const SingleNode = memo(({ id, data, type, selected }) => {
             
             {/* Buttom Handle Connector */}
             {
-                type != 'message' && type != 'action' &&
+                type != 'message' &&
                 <Handle
                     type="source"
                     position={Position.Bottom} 
