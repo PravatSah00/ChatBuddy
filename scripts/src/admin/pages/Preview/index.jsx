@@ -3,7 +3,7 @@ import ChatBot from '../../components/Chatbot';
 
 const Preview = () => {
     return (
-        <div>
+        <div style={{maxWidth: '700px', height: '85vh', margin: '30px auto'}}>
             <ChatBot/>
         </div>
     )

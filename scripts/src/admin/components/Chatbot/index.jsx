@@ -1,23 +1,42 @@
-// src/components/ChatBot.jsx
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import Fuse from "fuse.js";
-import {
-    Box, TextField, IconButton, Avatar,
-    Typography, Paper, Button,
-} from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
-import SmartToyIcon from '@mui/icons-material/SmartToy';
-import { motion } from "motion/react";
-import { BeatLoader } from 'react-spinners';
+
+import Container from './components/Container';
+import Header from './components/Header';
+import MessageContainer from './components/MessageContainer';
+import BotAvatar from './components/BotAvatar';
+import MessageBoxWrapper from './components/MessageBoxWrapper';
+import LoadingMessage from './components/LoadingMessage';
+import OptionButton from './components/OptionButton';
+import ActionInput from './components/ActionInput';
+import SubmitIcon from './components/SubmitIcon';
+import MessageInput from './components/MessageInput';
+
+import { Box, IconButton, Typography } from '@mui/material';
 
 import { useSelector } from "react-redux";
+import { useTheme } from '@mui/material/styles';
 
+/**
+ * Create sleep function
+ */
+const sleep = async (time) => {
+    return new Promise((res, rej) => {
+        setTimeout(() => { res() }, time)
+    })
+}
+
+/**
+ * Submit action functionlity
+ * @param {*} data 
+ * @returns 
+ */
 const submitAction = async (data) => {
     const result = await axios.post(`${chatbotLocalizer.apiurl}/chatbuddy/action`, data, {
         headers: {
-          'Content-Type': 'multipart/form-data',
-          "X-WP-Nonce":    chatbotLocalizer.nonce,
+            'Content-Type': 'multipart/form-data',
+            "X-WP-Nonce": chatbotLocalizer.nonce,
         },
     });
 
@@ -27,7 +46,7 @@ const submitAction = async (data) => {
 /**
  * Default message
  */
-const DEFAULT_MESSAGE = '👋 Hi, we\'r here to help you.';
+const DEFAULT_MESSAGE = 'Hi, we\'r here to help you.';
 
 /**
  * Not Find message
@@ -68,6 +87,11 @@ const getChildNodes = (rootNode, nodes, edges) => {
  * Main chatbot component
  */
 const ChatBot = () => {
+    /**
+     * Get the theme object
+     */
+    const theme = useTheme();
+
     /**
      * Collect smartAnswer and flow builder
      */
@@ -167,46 +191,59 @@ const ChatBot = () => {
     };
 
     /**
+     * Handle action chose
+     */
+    const handleActionChose = (newNode) => {
+        // Check action has input or not
+        const inputs = newNode.data.inputs?.trim();
+        const hasInput = inputs?.length > 0;
+
+        // If it has input then show inputsection
+        if (hasInput) {
+
+            // Set user reply
+            setTimeout(() => {
+                const botMessage = {
+                    from: 'user',
+                    type: 'action',
+                    node: newNode,
+                    action: newNode.data.key,
+                    text: newNode.data.message,
+                    inputs: inputs,
+                    inputsValue: {},
+                    time: new Date()
+                };
+                setMessages(prev => [...prev, botMessage]);
+            }, 600);
+        } else {
+            const userMessage = {
+                from: 'user',
+                type: 'message',
+                text: newNode.data.label,
+                time: new Date()
+            };
+            setMessages(prev => [...prev, userMessage]);
+            handleActionSubmit({ action: newNode.data.key, value: {}, node: newNode });
+        }
+    }
+
+    /**
+     * Handle redirect chose by user
+     */
+    const handleRedirectChose = (newNode) => {
+        window.open(newNode.data.url, '_blank');
+    }
+
+    /**
      * Handle option chose by user
      */
-    const handleOptionChose = (newNode) => {
+    const handleOptionChose = async (newNode) => {
 
         /**
          * Handle Action submit
          */
         if (newNode.type == 'action') {
-
-            // Check action has input or not
-            const inputs = newNode.data.inputs?.trim();
-            const hasInput = inputs?.length > 0;
-
-            // If it has input then show inputsection
-            if (hasInput) {
-
-                // Set user reply
-                setTimeout(() => {
-                    const botMessage = {
-                        from:        'user',
-                        type:        'action',
-                        action:      newNode.data.key,
-                        text:        newNode.data.message,
-                        inputs:      inputs,
-                        inputsValue: {},
-                        time:        new Date()
-                    };
-                    setMessages(prev => [...prev, botMessage]);
-                }, 600);
-            } else {
-                const userMessage = {
-                    from: 'user',
-                    type: 'message',
-                    text: newNode.data.label,
-                    time: new Date()
-                };
-                setMessages(prev => [...prev, userMessage]);
-                handleActionSubmit({ action: newNode.data.key, value: {} });
-            }
-
+            handleActionChose(newNode);
             return;
         }
 
@@ -214,46 +251,88 @@ const ChatBot = () => {
          * Handle Redirect submit
          */
         if (newNode.type == 'redirect') {
-            window.open(newNode.data.url, '_blank');
+            handleRedirectChose(newNode);
         }
 
         // Set user reply
         const userMessage = { from: 'user', type: 'message', text: newNode.data.label, time: new Date() };
         setMessages(prev => [...prev, userMessage]);
 
+        let currentNode = newNode;
 
-        // Get child of new Node
-        const newNodesChildren = getChildNodes(newNode, nodes, edges);
+        while (true) {
 
-        // Set bot reply
-        setTimeout(() => {
-            const botMessage = {
-                from: 'bot',
-                type: 'option',
-                node: newNode,
-                time: new Date()
-            };
-            setMessages(prev => [...prev, botMessage]);
-        }, 600);
+            if (currentNode.type == 'action') {
+                await sleep(100);
+                handleActionChose(currentNode);
+                return;
+            }
 
-        // Reset conversation if the option is finished
-        if (newNodesChildren.length == 0) {
-            setTimeout(() => {
-                const botMessage = {
+            if (currentNode.type == 'redirect') {
+                await sleep(100);
+                handleRedirectChose(currentNode);
+            }
+
+            // Get child of new Node
+            const currentNodeChilds = getChildNodes(currentNode, nodes, edges);
+
+            // if current node has no children
+            if (currentNodeChilds.length === 0) {
+
+                const nodeMessage = currentNode.data.message;
+
+                await sleep(300);
+                let botMessage = {
+                    from: 'bot',
+                    type: 'message',
+                    text: nodeMessage,
+                    time: new Date()
+                };
+                setMessages(prev => [...prev, botMessage]);
+
+                await sleep(300);
+                botMessage = {
                     from: 'bot',
                     type: 'option',
                     node: getRootNode(nodes),
                     time: new Date()
                 };
                 setMessages(prev => [...prev, botMessage]);
-            }, 600);
+
+                return;
+            }
+
+            if (currentNodeChilds.length > 1) {
+                await sleep(300);
+                const botMessage = {
+                    from: 'bot',
+                    type: 'option',
+                    node: currentNode,
+                    time: new Date()
+                };
+                setMessages(prev => [...prev, botMessage]);
+
+                return;
+            }
+
+            const nodeMessage = currentNode.data.message;
+            await sleep(300);
+            const botMessage = {
+                from: 'bot',
+                type: 'message',
+                text: nodeMessage,
+                time: new Date()
+            };
+            setMessages(prev => [...prev, botMessage]);
+
+            currentNode = currentNodeChilds[0];
         }
     }
 
     /**
      * Handle Action submit
      */
-    const handleActionSubmit = async ({ action, value }) => {
+    const handleActionSubmit = async ({ action, value, node }) => {
 
         // Set bot loading message
         const botLoadingMessage = { from: 'bot', type: 'loading', time: new Date() };
@@ -264,26 +343,108 @@ const ChatBot = () => {
         // Remove bot loading message
         setMessages((preMsg) => preMsg.filter((msg, ind) => ind != preMsg.length - 1));
 
-        // Set bot message
-        setTimeout(() => {
-            const botMessage = {
-                from: 'bot',
-                type: 'message',
-                text: message,
-                time: new Date()
-            };
-            setMessages(prev => [...prev, botMessage]);
-        }, 600);
+        let currentNode       = node;
+        let currentNodeChilds = getChildNodes(currentNode, nodes, edges);
 
-        setTimeout(() => {
-            const botMessage = {
+        // Check for no nodes
+        if (currentNodeChilds.length === 0) {
+            const nodeMessage = currentNode.data.message;
+
+            await sleep(300);
+            let botMessage = {
                 from: 'bot',
                 type: 'option',
                 node: getRootNode(nodes),
                 time: new Date()
             };
             setMessages(prev => [...prev, botMessage]);
-        }, 1200);
+
+            return;
+        }
+
+        // Check for multiple node
+        if (currentNodeChilds.length > 1) {
+            await sleep(300);
+            const botMessage = {
+                from: 'bot',
+                type: 'option',
+                node: currentNode,
+                time: new Date()
+            };
+            setMessages(prev => [...prev, botMessage]);
+
+            return;
+        }
+        
+        currentNode = currentNodeChilds[0];
+
+        while (true) {
+
+            if (currentNode.type == 'action') {
+                await sleep(100);
+                handleActionChose(currentNode);
+                return;
+            }
+
+            if (currentNode.type == 'redirect') {
+                await sleep(100);
+                handleRedirectChose(currentNode);
+            }
+
+            // Get child of new Node
+            let currentNodeChilds = getChildNodes(currentNode, nodes, edges);
+
+            // if current node has no children
+            if (currentNodeChilds.length === 0) {
+
+                const nodeMessage = currentNode.data.message;
+
+                await sleep(300);
+                let botMessage = {
+                    from: 'bot',
+                    type: 'message',
+                    text: nodeMessage,
+                    time: new Date()
+                };
+                setMessages(prev => [...prev, botMessage]);
+
+                await sleep(300);
+                botMessage = {
+                    from: 'bot',
+                    type: 'option',
+                    node: getRootNode(nodes),
+                    time: new Date()
+                };
+                setMessages(prev => [...prev, botMessage]);
+
+                return;
+            }
+
+            if (currentNodeChilds.length > 1) {
+                await sleep(300);
+                const botMessage = {
+                    from: 'bot',
+                    type: 'option',
+                    node: currentNode,
+                    time: new Date()
+                };
+                setMessages(prev => [...prev, botMessage]);
+
+                return;
+            }
+
+            const nodeMessage = currentNode.data.message;
+            await sleep(300);
+            const botMessage = {
+                from: 'bot',
+                type: 'message',
+                text: nodeMessage,
+                time: new Date()
+            };
+            setMessages(prev => [...prev, botMessage]);
+
+            currentNode = currentNodeChilds[0];
+        }
     }
 
     /**
@@ -296,10 +457,10 @@ const ChatBot = () => {
      */
     const prepareInput = (inputStr) => {
         const result = inputStr
-            .split('|')                                     // Split by separator
+            .split('|')                                             // Split by separator
             .map((part) => {
                 return {
-                    key: part.trim()                                 // Remove extra spaces
+                    key: part.trim()                                // Remove extra spaces
                         .toLowerCase()                              // Lowercase all
                         .replace(/\b\w/g, c => c.toUpperCase())     // Capitalize first letter of each word
                         .replace(/\s+/g, ''),                       // Remove spaces to make camel case-like
@@ -310,248 +471,166 @@ const ChatBot = () => {
     }
 
     return (
-        <Paper elevation={6} sx={{
-            mx: 'auto',
-            mt: 6,
-            height: '85vh',
-            maxWidth: 700,
-            display: 'flex',
-            flexDirection: 'column',
-            borderRadius: 5,
-            backdropFilter: 'blur(12px)',
-            background: '#ffffffaa',
-            overflow: 'hidden',
-            boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
-        }}>
+        <Container>
+
             {/* Header Section */}
-            <Box sx={{
-                bgcolor: 'primary.main',
-                color: 'white',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                p: 2,
-                gap: 1,
-            }}>
-                <SmartToyIcon />
-                <Typography variant="h6">ChatBuddy</Typography>
-            </Box>
+            <Header />
 
-            {/* Message Section */}
-            <Box
-                sx={{
-                    flexGrow: 1,
-                    px: 2,
-                    py: 3,
-                    overflowY: 'auto',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: 1.5,
-                }}
-            >
-                {messages.map((msg, index) => {
+            {/* Message Contaienr section */}
+            <MessageContainer>
+                {
+                    messages.map((msg, index) => {
 
-                    const isUser = msg.from === 'user';
-                    const isOption = msg.type === 'option';
-                    const isAction = msg.type === 'action';
-                    const isLoading = msg.type === 'loading';
-                    const isPreviousBot = index > 0 && messages[index - 1].from === 'bot';
-                    const isNextBot = index < messages.length - 1 && messages[index + 1].from === 'bot';
+                        const isUser = msg.from === 'user';
+                        const isOption = msg.type === 'option';
+                        const isAction = msg.type === 'action';
+                        const isLoading = msg.type === 'loading';
+                        const isPreviousBot = index > 0 && messages[index - 1].from === 'bot';
+                        const isNextBot = index < messages.length - 1 && messages[index + 1].from === 'bot';
 
-                    // Get the child nodes
-                    const childNodes = isOption ? getChildNodes(msg.node, nodes, edges) : null;
+                        // Get the child nodes
+                        const childNodes = isOption ? getChildNodes(msg.node, nodes, edges) : null;
 
-                    return (
-                        <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.3 }}
-                            style={{
-                                alignSelf: isUser ? 'flex-end' : 'flex-start',
-                                display: 'flex',
-                                alignItems: 'flex-start',
-                                gap: '8px',
-                                maxWidth: '70%',
-                            }}
-                        >
-                            {/** Render avater */}
-                            {!isUser && <>
+                        return (
+                            <>
+                                {/* Render the avater */}
                                 {
-                                    !isPreviousBot ?
-                                        <Avatar sx={{ width: 32, height: 32 }}>
+                                    !isUser && !isPreviousBot && <BotAvatar />
+                                }
+
+                                <MessageBoxWrapper key={index} isUser={isUser}>
+                                    {/* Render Loading */}
+                                    {
+                                        isLoading && <LoadingMessage />
+                                    }
+
+                                    {/* Render message */}
+                                    {
+                                        !isLoading &&
+                                        <>
                                             {
-                                                !isPreviousBot &&
-                                                <SmartToyIcon fontSize="small" />
+                                                !isOption ?
+                                                    <Typography sx={{ whiteSpace: 'pre-line', fontSize: '18px', fontWeight: '350' }} variant="body">{msg.text}</Typography>
+                                                    :
+                                                    <Typography sx={{ whiteSpace: 'pre-line', fontSize: '18px', fontWeight: '350' }} variant="body">{msg.node.data.message}</Typography>
                                             }
-                                        </Avatar>
-                                        :
-                                        <Box sx={{ width: 32, height: 32 }}></Box>
-                                }
-                            </>
-                            }
-                            <Box
-                                sx={{
-                                    bgcolor: isUser ? 'primary.main' : '#ececec',
-                                    color: isUser ? 'white' : 'black',
-                                    width: isAction ? '350px' : 'auto',
-                                    maxWidth: '400px',
-                                    px: 2,
-                                    py: 1.2,
-                                    borderRadius: isUser ? '16px 16px 0px 16px' : '16px 16px 16px 0px',
-                                    position: 'relative',
-                                    boxShadow: "0 0 3px #aaaaaaaa",
-                                }}
-                            >
-                                {/* Render Loading */}
-                                {
-                                    isLoading &&
-                                    <Box sx={{ width: 200, height: 20, display: 'flex', justifyContent: 'center' }}>
-                                        <BeatLoader size={14} color='#17A2B8' />
-                                    </Box>
+                                        </>
+                                    }
 
-                                }
-
-                                {/* Render message */}
-                                {
-                                    !isLoading &&
-                                    <>
-                                        {
-                                            !isOption ?
-                                                <Typography variant="body2">{msg.text}</Typography>
-                                                :
-                                                <Typography variant="body2">{msg.node.data.message}</Typography>
-                                        }
-                                    </>
-                                }
-
-                                {/* Render option */}
-                                {
-                                    isOption && childNodes.length > 0 &&
-                                    <Box
-                                        sx={{
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            gap: 0.7,
-                                            my: 2,
-                                        }}
-                                    >
-                                        {
-                                            childNodes.map((node) => {
-                                                return (
-                                                    <Button
-                                                        variant="outlined"
-                                                        size='small'
-                                                        onClick={() => handleOptionChose(node)}
-                                                    >{node.data.label}</Button>
-                                                )
-                                            })
-                                        }
-                                    </Box>
-                                }
-
-                                {/* Render inputs */}
-                                {
-                                    isAction &&
-                                    <>
+                                    {/* Render option */}
+                                    {
+                                        isOption && childNodes.length > 0 &&
                                         <Box
-                                            sx={{
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                gap: 0.5,
-                                                mt: 1.5,
-                                            }}
+                                            sx={{ display: 'flex', flexDirection: 'column', gap: 0.9, mt: 2, }}
                                         >
                                             {
-                                                prepareInput(msg.inputs).map((input) => (
-                                                    <TextField
-                                                        variant="standard"
-                                                        placeholder={input.label}
-                                                        value={msg.inputsValue[input.key]}
-                                                        onChange={(e) => {
-                                                            setMessages((prevMsg) => {
-                                                                return prevMsg.map(( pmsg, ind ) => {
-                                                                    return ind == index ? {...pmsg, inputsValue: { ...pmsg.inputsValue, [input.key]: e.target.value }} : pmsg;
-                                                                })
-                                                            })
-                                                        }}
-                                                        fullWidth
-                                                    />
-                                                ))
+                                                childNodes.map((node) => {
+                                                    return (
+                                                        <OptionButton onClick={() => handleOptionChose(node)}>
+                                                            {node.data.label}
+                                                        </OptionButton>
+                                                    )
+                                                })
                                             }
                                         </Box>
-                                        <Box sx={{textAlign: 'right'}}>
-                                            <IconButton
-                                                sx={{ color: 'white' }}
-                                                onClick={() => handleActionSubmit({ action: msg.action, value: msg.inputsValue })}
-                                            >
-                                                <SendIcon />
-                                            </IconButton>
-                                        </Box>
-                                    </>
-                                }
+                                    }
 
-                                {/* Render timestamp */}
-                                {
-                                    !isNextBot &&
-                                    <Typography
-                                        variant="caption"
-                                        sx={{
-                                            position: 'absolute',
-                                            bottom: -22,
-                                            left: 6,
-                                            opacity: 0.6,
-                                            fontSize: '0.7rem',
-                                        }}
-                                    >
-                                        {formatTime(msg.time)}
-                                    </Typography>
-                                }
-                            </Box>
-                        </motion.div>
-                    );
-                })}
+                                    {/* Render inputs */}
+                                    {
+                                        isAction &&
+                                        <>
+                                            <Box
+                                                sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 2 }}
+                                            >
+                                                {
+                                                    prepareInput(msg.inputs).map((input) => (
+                                                        <ActionInput
+                                                            placeholder={input.label}
+                                                            value={msg.inputsValue[input.key]}
+                                                            onChange={(e) => {
+                                                                setMessages((prevMsg) => {
+                                                                    return prevMsg.map((pmsg, ind) => {
+                                                                        return ind == index ? { ...pmsg, inputsValue: { ...pmsg.inputsValue, [input.key]: e.target.value } } : pmsg;
+                                                                    })
+                                                                })
+                                                            }}
+                                                        />
+                                                    ))
+                                                }
+                                            </Box>
+                                            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'end' }}>
+                                                <IconButton
+                                                    sx={{
+                                                        width: '41px',
+                                                        height: '41px',
+                                                        display: 'flex',
+                                                        justifyContent: 'center',
+                                                        alignItems: 'center',
+                                                    }}
+                                                    onClick={() => handleActionSubmit({ action: msg.action, value: msg.inputsValue, node: msg.node })}
+                                                >
+                                                    <SubmitIcon color={theme.palette.button.submitInput} />
+                                                </IconButton>
+                                            </Box>
+                                        </>
+                                    }
+
+                                    {/* Render timestamp */}
+                                    {
+                                        !isNextBot &&
+                                        <Typography
+                                            variant="caption"
+                                            sx={{
+                                                position: 'absolute',
+                                                bottom: -22,
+                                                left: 6,
+                                                opacity: 0.6,
+                                                fontSize: '0.7rem',
+                                            }}
+                                        >
+                                            {formatTime(msg.time)}
+                                        </Typography>
+                                    }
+                                </MessageBoxWrapper>
+                            </>
+                        );
+                    })}
                 <div ref={endRef} />
-            </Box>
+            </MessageContainer>
 
             {/* Input Section */}
             <Box
                 sx={{
-                    p: 2,
-                    bgcolor: 'background.paper',
+                    p: 3,
+                    bgcolor: 'background.messageInput',
                     borderTop: '1px solid #eee',
-                    position: 'relative'
+                    position: 'relative',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 1.5,
                 }}
             >
-                <Paper
-                    elevation={3}
+                {/*Text Input */}
+                <MessageInput
+                    placeholder="Compose your message..."
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleMessageSend()}
+                />
+                <IconButton
                     sx={{
+                        width: '50px',
+                        height: '50px',
                         display: 'flex',
+                        justifyContent: 'center',
                         alignItems: 'center',
-                        px: 2,
-                        py: 1,
-                        borderRadius: 999,
-                        background: '#f5f5f5',
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                        gap: 1.5,
                     }}
+                    onClick={handleMessageSend}
                 >
-                    {/* 💬 Text Input */}
-                    <TextField
-                        variant="standard"
-                        placeholder="Type a message"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && handleMessageSend()}
-                        fullWidth
-                    />
-                    <IconButton onClick={handleMessageSend} color="primary">
-                        <SendIcon />
-                    </IconButton>
-                </Paper>
+                    <SubmitIcon color={theme.palette.button.submitMessage} />
+                </IconButton>
             </Box>
-
-        </Paper>
+        </Container>
     );
 };
 
