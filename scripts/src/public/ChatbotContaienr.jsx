@@ -1,43 +1,39 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Box, ClickAwayListener } from '@mui/material';
-import ChatBot from '@public/Chatbot.jsx';
+import ChatBot from '@public/components/Chatbot';
 import chatImage from './assets/chatbot.png';
 
 const ChatbotContainer = () => {
 
     const [opened, setOpened] = useState(false);
-    const chatbotRef = useRef(null);
 
     return (
         <>
-            {/* <Draggable> */}
-                <Box
-                    sx={{
-                        position: 'fixed',
-                        bottom: 12,
-                        right: 30,
-                        zIndex: 1300,
+            <Box
+                sx={{
+                    position: 'fixed',
+                    bottom: 10,
+                    right: 30,
+                    zIndex: 1300,
+                }}
+            >
+                <img
+                    src={chatImage}
+                    alt="Chatbot"
+                    draggable={false}
+                    style={{
+                        width: 50,
+                        height: 50,
+                        padding: 8,
+                        borderRadius: '50%',
+                        cursor: 'pointer',
+                        backgroundColor: '#fff',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.29)',
                     }}
-                >
-                    <img
-                        src={chatImage}
-                        alt="Chatbot"
-                        draggable={false}
-                        style={{
-                            width: 50,
-                            height: 50,
-                            padding: 8,
-                            borderRadius: '50%',
-                            cursor: 'pointer',
-                            backgroundColor: '#fff',
-                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.29)',
-                        }}
-                        onClick={() => setOpened(true)}
-                    />
-                </Box>
-            {/* </Draggable> */}
+                    onClick={() => setOpened(true)}
+                />
+            </Box>
 
-            {/* Chat Container (Initially Centered + Draggable + ClickAway) */}
             {opened && (
                 <Box
                     sx={{
@@ -51,38 +47,24 @@ const ChatbotContainer = () => {
                     }}
                     className='chatboxContainer'
                 >
-                    {/* <Draggable
-                        nodeRef={chatbotRef}
-                        // defaultPosition={{
-                        //     x: (window.innerWidth - 650) / 2,
-                        //     y: (window.innerHeight - 500) / 2,
-                        // }}
-                    > */}
+                    <ClickAwayListener onClickAway={() => setOpened(false)}>
                         <Box
-                            ref={chatbotRef}
                             sx={{
+                                color: 'transparent',
                                 position: 'absolute',
-                                top: '50%',
-                                left: '50%',
-                                transform: 'translate(-50%, -50%)',
-                                boxShadow: 6,
                                 overflow: 'hidden',
-                                borderRadius: 5,
-                                width: 'min(650px, 80%)',
-                                zIndex: 1201,
-                                margin: 'auto',
+                                width: 'min(550px, 80%)',
+                                height: '85vh',
+                                right: '60px',
+                                bottom: '65px',
+                                zIndex: 9999,
                             }}
                         >
-                            <ClickAwayListener onClickAway={() => setOpened(false)}>
-                                <Box>
-                                    <ChatBot />
-                                </Box>
-                            </ClickAwayListener>
+                            <ChatBot />
                         </Box>
-                    {/* </Draggable> */}
+                    </ClickAwayListener>
                 </Box>
             )}
-
         </>
     );
 };
