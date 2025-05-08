@@ -39,11 +39,10 @@ class PublicRestApi {
         $action  = $request->get_param( 'action' );
         $value   = $request->get_param( 'value' );
 
-        // Handle with action
+        do_action( 'chatbuddy_action_submit', $action, $value );
 
         return rest_ensure_response([
             'success' => true,
-            'message' => 'Successfully Submited', 
         ]);
 	}
 }

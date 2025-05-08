@@ -52,7 +52,42 @@ class Chatbot_Public {
 		new PublicRestApi();
 
 		$this->plugin_name = $plugin_name;
-		$this->version = $version;
+		$this->version     = $version;
+
+		add_action( 'chatbuddy_action_submit', [$this, 'handle_chatbuddy_mail_submit'], 10, 2 );
+
+	}
+
+	/**
+	 * Handle mail submit on mail action
+	 * @param mixed $action
+	 * @param mixed $value
+	 * @return void
+	 */
+	public function handle_chatbuddy_mail_submit( $action, $values ) {
+
+		// Check for mail submit
+		if ( ! str_contains( $action, '#mail' ) ) {
+			return;
+		}
+
+		if ( ! is_array( $values ) )  {
+			return;
+		}
+
+		$admin_email = get_option( 'admin_email' );
+    	$subject 	 = 'Form Submission: ' . $action ;
+    	$headers 	 = [ 'Content-Type: text/html; charset=UTF-8' ];
+
+    	// Build message
+    	$message = "<h2>Form Submission" . $action . "</h2><ul>";
+
+		foreach ($values as $key => $value) {
+			$message .= "<li><strong>{$key}:</strong> " . esc_html( $value ) . "</li>";
+		}
+    	$message .= "</ul>";
+
+    	wp_mail( $admin_email, $subject, $message, $headers );
 
 	}
 
