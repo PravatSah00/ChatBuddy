@@ -14,7 +14,7 @@ const MessageBoxWrapper = ({isUser, children}) => {
                 display: 'flex',
                 alignItems: 'flex-start',
                 gap: '8px',
-                maxWidth: '70%',
+                maxWidth: '80%',
             }}
         >
             {

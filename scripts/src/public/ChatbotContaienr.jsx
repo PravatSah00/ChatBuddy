@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, ClickAwayListener } from '@mui/material';
 import ChatBot from '@public/components/Chatbot';
-import chatImage from './assets/chatbot.png';
+import chatImage from './assets/main-icon.gif';
 
 const ChatbotContainer = () => {
 
@@ -22,15 +22,17 @@ const ChatbotContainer = () => {
                     alt="Chatbot"
                     draggable={false}
                     style={{
-                        width: 50,
-                        height: 50,
-                        padding: 8,
+                        width: 56,
+                        height: 56,
                         borderRadius: '50%',
                         cursor: 'pointer',
                         backgroundColor: '#fff',
                         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.29)',
                     }}
-                    onClick={() => setOpened(true)}
+                    onClick={(e) => {
+                        setOpened(!opened);
+                        e.stopPropagation();
+                    }}
                 />
             </Box>
 
@@ -53,10 +55,19 @@ const ChatbotContainer = () => {
                                 color: 'transparent',
                                 position: 'absolute',
                                 overflow: 'hidden',
-                                width: 'min(550px, 80%)',
+                                width: 'min(550px, 90%)',
                                 height: '85vh',
-                                right: '60px',
-                                bottom: '65px',
+                                right: {
+                                    xs: '50%',
+                                    sm: '50%',
+                                    md: '60px',
+                                },
+                                transform: {
+                                    xs: 'translateX(50%)',
+                                    sm: 'translateX(50%)',
+                                    md: 'none',
+                                },
+                                bottom: '70px',
                                 zIndex: 9999,
                             }}
                         >

@@ -76,11 +76,11 @@ class Chatbot_Public {
 		}
 
 		$admin_email = get_option( 'admin_email' );
-    	$subject 	 = 'Form Submission: ' . $action ;
+    	$subject 	 = 'Mail From Chatbuddy: ' . $action ;
     	$headers 	 = [ 'Content-Type: text/html; charset=UTF-8' ];
 
     	// Build message
-    	$message = "<h2>Form Submission" . $action . "</h2><ul>";
+    	$message = "<h2>Mail From Chatbuddy: " . $action . "</h2><ul>";
 
 		foreach ($values as $key => $value) {
 			$message .= "<li><strong>{$key}:</strong> " . esc_html( $value ) . "</li>";

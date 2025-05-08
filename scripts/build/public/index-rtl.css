@@ -1,16 +1,1 @@
-/*!**************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[2].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[2].use[2]!./src/public/index.css ***!
-  \**************************************************************************************************************************************************************************/
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-
-.chatTitle {
-    color: white;
-}
-
-.chatboxContainer input:focus {
-    outline: 5px 5px #aaaaaa !important;
-}
+*{box-sizing:border-box;margin:0;padding:0}.chatTitle{color:#fff}.chatboxContainer input:focus{outline:5px 5px #aaa!important}
