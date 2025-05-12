@@ -35,7 +35,7 @@ const submitAction = async (data) => {
     const result = await axios.post(`${chatbotLocalizer.apiurl}/chatbuddy/action`, data, {
         headers: {
             'Content-Type': 'multipart/form-data',
-            "X-WP-Nonce": chatbotLocalizer.nonce,
+            // "X-WP-Nonce": chatbotLocalizer.nonce,
         },
     });
 
