@@ -1,1 +1,1 @@
-*{box-sizing:border-box;margin:0;padding:0}.chatTitle{color:#fff}.chatboxContainer input:focus{outline:5px 5px #aaa!important}
+*{box-sizing:border-box;margin:0;padding:0}.chatTitle{color:#fff}.chatboxContainer input:focus{outline:5px 5px #aaa!important}@keyframes chatbotPopIn{0%{opacity:0;transform:scale(0)}60%{opacity:1;transform:scale(1.1)}80%{transform:scale(.95)}to{transform:scale(1)}}.chatbotMessageAnimation{animation:chatbotPopIn .6s ease-out forwards;transform-origin:right center}

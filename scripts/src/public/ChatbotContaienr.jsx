@@ -1,11 +1,49 @@
-import React, { useState } from 'react';
-import { Box, ClickAwayListener } from '@mui/material';
+import React, { useRef, useState } from 'react';
+import { Box, ClickAwayListener, Button } from '@mui/material';
 import ChatBot from '@public/components/Chatbot';
 import chatImage from './assets/main-icon.gif';
+
+function ChatBubbleLauncher({ onClick }) {
+    return (
+        <Box
+            className="chatbotMessageAnimation"
+            sx={{
+                position: 'fixed',
+                bottom: 75,
+                right: 24,
+                zIndex: 1300,
+            }}
+            onClick={onClick}
+        >
+            <Button
+                variant="contained"
+                color="primary"
+                // startIcon={<ChatIcon />}
+                sx={{
+                    borderRadius: '10px',
+                    textTransform: 'none',
+                    fontSize: '1rem',
+                    px: 2.5,
+                    py: 0.7,
+                    boxShadow: 4,
+                    fontSize: "14px",
+                    backgroundColor: '#2b71f0',
+                    '&:hover': {
+                        backgroundColor: '#1a5edb',
+                    },
+                }}
+            >
+                {/* Compose your reply */}
+                Hi there  👋 how can I help you?
+            </Button>
+        </Box>
+    );
+}
 
 const ChatbotContainer = () => {
 
     const [opened, setOpened] = useState(false);
+    const [firstTime, setFirstTime] = useState(true);
 
     return (
         <>
@@ -17,6 +55,16 @@ const ChatbotContainer = () => {
                     zIndex: 1300,
                 }}
             >
+                {
+                    !opened && firstTime &&
+                        <ChatBubbleLauncher
+                            onClick={(e) => {
+                                setFirstTime(false);
+                                setOpened(!opened);
+                                e.stopPropagation();
+                            }}
+                        />
+                }
                 <img
                     src={chatImage}
                     alt="Chatbot"
@@ -30,6 +78,7 @@ const ChatbotContainer = () => {
                         boxShadow: '0 4px 12px rgba(0, 0, 0, 0.29)',
                     }}
                     onClick={(e) => {
+                        setFirstTime(false);
                         setOpened(!opened);
                         e.stopPropagation();
                     }}
