@@ -2,7 +2,25 @@ import React from 'react'
 import { Box, Typography, Avatar } from '@mui/material';
 import chatbotImage from '@admin/assets/chatbot.png';
 
-const Header = () => {
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+
+const CrossButton = ({ onClick }) => (
+    <IconButton
+        aria-label="close"
+        onClick={(e) => onClick(e)}
+        sx={{
+            position: 'absolute',
+            right: 8,
+            top: 15,
+            color: (theme) => theme.palette.grey[500],
+        }}
+    >
+        <CloseIcon />
+    </IconButton>
+);
+
+const Header = ({onClose}) => {
     return (
         <Box sx={{
             bgcolor: 'background.header',
@@ -23,7 +41,7 @@ const Header = () => {
                     padding: '3px',
                 }}
             />
-            
+
             {/* Chatbot title */}
             <Typography
                 variant="h5"
@@ -31,6 +49,8 @@ const Header = () => {
                     color: 'text.header'
                 }}
             >Chatbuddy</Typography>
+
+            <CrossButton onClick={(e) => onClose(e) }/>
         </Box>
     )
 }

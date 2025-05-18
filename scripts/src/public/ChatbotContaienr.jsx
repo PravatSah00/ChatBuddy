@@ -120,7 +120,7 @@ const ChatbotContainer = () => {
                                 zIndex: 9999,
                             }}
                         >
-                            <ChatBot />
+                            <ChatBot onClose={() => setOpened(false)}/>
                         </Box>
                     </ClickAwayListener>
                 </Box>

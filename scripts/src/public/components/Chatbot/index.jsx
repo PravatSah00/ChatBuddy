@@ -85,7 +85,7 @@ const getChildNodes = (rootNode, nodes, edges) => {
 /**
  * Main chatbot component
  */
-const ChatBot = () => {
+const ChatBot = ({onClose}) => {
     /**
      * Get the theme object
      */
@@ -471,7 +471,7 @@ const ChatBot = () => {
         <Container>
 
             {/* Header Section */}
-            <Header />
+            <Header onClose={onClose} />
 
             {/* Message Contaienr section */}
             <MessageContainer>
